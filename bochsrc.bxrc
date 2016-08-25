@@ -2,7 +2,7 @@
 # bochsrc.txt file for floppy boot
 ###############################################################
 
-floppya: 1_44=bootsect.img, status=inserted, write_protected=1
+floppya: 1_44=floppy.img, status=inserted, write_protected=1
 boot: floppy
 cpu: ips=15000000
 megs: 128

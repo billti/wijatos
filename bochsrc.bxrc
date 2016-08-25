@@ -1,0 +1,13 @@
+###############################################################
+# bochsrc.txt file for floppy boot
+###############################################################
+
+floppya: 1_44=bootsect.img, status=inserted, write_protected=1
+boot: floppy
+cpu: ips=15000000
+megs: 128
+
+# disable the mouse, since text only
+mouse: enabled=0
+
+display_library: win32, options="gui_debug"

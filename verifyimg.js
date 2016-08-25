@@ -27,6 +27,6 @@ if (fileBuff.readUInt8(0x41FF) !== 0x00) throw Error("Non 0x00 value at end of r
 if (fileBuff.readUInt8(0x4200) === 0x00) throw Error("0x00 value at start of first data cluster");
 if (fileBuff.readUInt8(0x4200) === 0xCC) throw Error("0xCC value at start of first data cluster");
 
-var endFile = 0x4200 + 120 * 0x200 /* 120 sectors = 60kb */ - 1;
-if (fileBuff.readUInt8(endFile) !== 0xCC) throw Error("Expected OS.BIN padding at offset 0x" + endFile.toString(16));
+var endFile = 0x4200 /* Start of data region */ + 120 * 0x200 /* 120 sectors = 60kb */ - 1;
+if (fileBuff.readUInt8(endFile) !== 0xCC) throw Error("Expected OS.BIN padding of 0xCC at offset 0x" + endFile.toString(16));
 if (fileBuff.readUInt8(endFile + 1) !== 0x00) throw Error("Expected 0s after OS.BIN file at offset 0x" + (endFile + 1).toString(16));

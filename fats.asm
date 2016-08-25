@@ -73,7 +73,7 @@ TIMES 4425 DB 0
 ; *************************************************************
 
 ; Should start at offset 0x2600 (i.e. after 19 sectors)
-; Only put one entry for loader.sys in the root directory
+; Only put one entry for OS.BIN in the root directory
 DB "OS      " ; 8 char filename
 DB "BIN"      ; 3 char extension
 DB 5          ; attribute flags. 0x01 = read only. 0x04 = system file

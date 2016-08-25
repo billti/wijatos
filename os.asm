@@ -18,19 +18,20 @@ WHITE_ON_BLACK equ 0x0f
     mov fs, ax
     mov gs, ax
     mov ss, ax
+
 	mov esi, runningStr
-	call writeline
-	mov esi, stoppingStr
 	call writeline
     
     ; *** TODO: Rest of OS.BIN here ***
+	mov esi, stoppingStr
+	call writeline
     hlt
     
   writeline: ; null terminated string should be in ESI
     push edi
     push esi
     ; The screen is an 80 x 25 area, with 2 bytes for each char.
-	; First, move all lines up one
+	; First, move all lines up one (i.e. scroll one line)
 	
 	mov edi, VIDEO_MEMORY
 	mov esi, VIDEO_MEMORY + 160

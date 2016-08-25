@@ -14,7 +14,7 @@
 ; A .img file is just a sequential series of bytes as would be in the disk sectors.
 ; There are 2880 sectors on a 1.44MB 3.5" floppy: 2880 * 512 = 1,474,560 (0x168000) bytes.
 ;
-; A bootable 3.5" floppy is uses the FAT12 file system, and is layed out here as follows:
+; A bootable 3.5" floppy uses the FAT12 file system, and here is layed out here as follows:
 ;
 ;  LBA            Byte range         Usage
 ;   0           0x0000 -   0x01FF   Boot sector
@@ -35,8 +35,7 @@
 ; The protected mode OS (120 sectors)
 %include "os.asm"
 
-; Floppy image padding
-
-; For a 1.44MB floppy, fill with 0s for 2880 sectors, less the above 153 sectors.
+; Floppy image padding (2880 minus the above (153) sectors)
 TIMES (2880 - 153) * 512 DB 0
+
 ; Total image size should be 1,474,560 (0x168000) bytes

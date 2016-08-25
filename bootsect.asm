@@ -3,21 +3,22 @@
 ; *************************************************************
 
 ; The BIOS will load the boot sector at 0x7c00 and transfer control to that address.
-; *** TODO ***
 ; This bootsector will relocate itself to 0x0600 and set stack top to 0x1000, and
 ; transfer control to its new location. It will then continue to load the first 120
 ; sectors (60kb) from disk to the memory region 0x1000 to 0xFFFF. It will then enter
 ; protected mode and transfer control to the load address of 0x1000 with a FAR jump.
 
-
 SECTION .bootsect vstart=0x0600  ; Will be moved to 0x0600 from BIOS default of 0x7c00 as first action
-
 BITS 16
 
     jmp near start  ; Use "near" jump to force a 3 byte instruction (next structure should be a offset 0x03)
 
 ; The BIOS parameter block
 %include "biosparams.asm"
+
+; The Global Descriptor Table for going into protected mode
+DW 0  ; 2 bytes padding to ensure GDT is aligned on 8 bytes
+%include "gdt.asm"
 
 ; Disk geometry is specified as C/H/S (cylinder/head/sector) with the first two being 0 based, and the last one
 ; based (i.e. the first sector, the boot sector, is 0/0/1). CHS can be mapped to a Logical Block Address (LBA) with:
@@ -170,8 +171,13 @@ counter DW 0
 	dec cx
 	jnz .loadsector  ; Repeat for any remaining sectors
 	
-  ; OS.BIN loaded at 0x1000
-    hlt ; TODO
+  ; OS.BIN loaded at 0x1000. Swith to protected mode and jump to it.
+    cli
+	lgdt [gdt_descriptor]
+	mov eax, cr0
+	or eax, 0x01
+	mov cr0, eax
+	jmp CODE_SEG:OS_START
 
 TIMES 0x200 - ($-$$) - 2 DB 0xCC  ; Padding sector with INT 3
 DW 0xAA55                         ; Bytes 510/511 of the boot sector must contain the MBR signature
